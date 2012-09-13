@@ -7,11 +7,11 @@
 		world = g.e('world'),
 		player = g.e('player,move1d,inventory'),
 		camera = g.e('camera'),
-		cloud1 = g.e('cloud'),
-		cloud2 = g.e('cloud'),
-		cloud3 = g.e('cloud'),
-		cloud4 = g.e('cloud'),
-		cloud5 = g.e('cloud'),
+		cloud1 = g.e('c'),
+		cloud2 = g.e('c'),
+		cloud3 = g.e('c'),
+		cloud4 = g.e('c'),
+		cloud5 = g.e('c'),
 		waterGradient,
 		skyGradient,
 		welcomeShown,
@@ -138,18 +138,23 @@
 	tt(doc,g);
 
 	g.c('camera', function(e) {
-		e.x = 0;
-		e.y = 0;
+		e.y = e.x = 0;
 	});
 
-	g.c('cloud', function(e) {
+	g.c('c', function(e) {
+		e.x = e.y = e.h = e.w = 0;
 		e.m = new Image();
 		e.m.src = 'cloud.png';
+		e.m.onload = function() {
+			e.j = 1;
+		};
 	});
-	g.cs('draw', 'cloud', function() {
-		context.drawImage(this.m, this.x, this.y, this.w, this.h);
+	g.cs('draw', 'c', function() {
+		if(this.j) {
+			context.drawImage(this.m, this.x, this.y, this.w, this.h);
+		}
 	});
-	g.cs('update', 'cloud', function(elapsed, temp1) {
+	g.cs('update', 'c', function(elapsed, temp1) {
 		// Reposition the cloud
 		temp1 = 500;
 		var offscreenX = u.r(temp1,0);
@@ -188,17 +193,16 @@
 
 		// Determine city topology
 		e.t = u.r(10);
+		temp2 = "#B28B54";
 		if(e.t>1) { // Grass
-			temp1 = "rgb(0,200,0)";
-			temp2 = "rgb(178,139,84)";
+			temp1 = "#00C800";
 		}
 		if(!e.t) { // Desert
-			temp1 = "rgb(252,225,139)";
-			temp2 = "rgb(221,207,161)";
+			temp1 = "#FCE18B";
+			temp2 = "#DDCFA1";
 		}
 		if(e.t == 1) { // Snow
-			temp1 = "rgb(255,255,255)";
-			temp2 = "rgb(178,139,84)";
+			temp1 = "#fff";
 		}
 		e.style = temp1;
 		e.style2 = temp2;
@@ -390,8 +394,6 @@
 	}).on('catch', function(fish) {
 		player.i.f[fish.n]++;
 		player.paused = false;
-	}).on('gotaway', function() {
-		player.paused = false;
 	}).on('start', function() {
 		player.paused = false;
 	}).on('buy', function(itemIndex, price) {
@@ -403,7 +405,7 @@
 		{
 			case '0':
 			case '1':
-				player.f += itemIndex == 1 ? 1000 : player.deltaF;
+				player.f += !itemIndex ? player.deltaF : 1000;
 				player.f = player.f > player.maxF ? player.maxF : player.f;
 				player.i.i[itemIndex]=0;
 				break;
@@ -465,22 +467,7 @@
 		reverseContext.restore();
 	};
 
-	camera.on('predraw', function() {
-		context.save();
-		context.translate(-camera.x, 0);
-		context.clearRect(camera.x, 0, camera.w, camera.h);
-
-		// Draw the sky
-		if(!skyGradient) {
-			skyGradient = context.createLinearGradient(0,0,0,300);
-			skyGradient.addColorStop(0,'rgb(163,164,255)');
-			skyGradient.addColorStop(0.9, 'rgb(200,200,255)');
-			skyGradient.addColorStop(1,'rgb(200,200,255)');
-		}
-		drawRect(camera.x, 0, camera.x + camera.w, 300, skyGradient);
-
-
-	}).on('postdraw', function() {
+	camera.on('postdraw', function() {
 		context.restore();
 
 		// Draw the water
@@ -498,6 +485,19 @@
 		drawSensor();
 	}).on('update', function() {
 		camera.x = player.x - (camera.w/2) + player.w/2;
+
+		// Predraw setup
+		context.save();
+		context.translate(-camera.x, 0);
+		context.clearRect(camera.x, 0, camera.w, camera.h);
+
+		// Draw the sky
+		if(!skyGradient) {
+			skyGradient = context.createLinearGradient(0,0,0,300);
+			skyGradient.addColorStop(0,'#A3A4FF');
+			skyGradient.addColorStop(0.9, '#C8C8FF');
+		}
+		drawRect(camera.x, 0, camera.x + camera.w, 300, skyGradient);
 	});
 	camera.w = canvasElement.width = innerWidth;
 	camera.h = canvasElement.height = innerHeight;
@@ -557,14 +557,14 @@
 			}
 		}
 		temp1 = Math.floor((player.x + player.w / 2) * camera.w / world.length);
-		context.fillStyle = "rgb(255,255,0)";
+		context.fillStyle = "#FF0";
 		context.fillRect(temp1 - temp2/2, 10, temp2, temp2);
 	}
 
 	function drawFuelGauge(temp1) {
 		temp1 = player.f/player.maxF;
 		drawRect(10,30,35,130,"rgba(0,0,0,0.5)");
-		drawRect(10,130-100*temp1,35,130,temp1<0.3?"rgb(193,0,0)":"rgb(0,193,0)");
+		drawRect(10,130-100*temp1,35,130,temp1<0.3?"#C10000":"#00C100");
 	}
 
 	// Draw the sensor if the player owns it

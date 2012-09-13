@@ -1,7 +1,7 @@
-m = function(doc, g, u) {
+window.m = function(doc, g, u) {
 	var wrapper = doc.getElementById('m'),
-		listWrapper = doc.getElementById('list'),
-		detailWrapper = doc.getElementById('detail'),
+		listWrapper = doc.getElementById('o'),
+		detailWrapper = doc.getElementById('d'),
 		buyMenu = doc.getElementById('b'),
 		sellMenu = doc.getElementById('s'),
 		okButton = doc.getElementById('ok'),

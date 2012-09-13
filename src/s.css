@@ -8,6 +8,7 @@ html,body {
 	width:500px;
 	left:50%;
 	border-radius: 8px;
+	background: #fff;
     background: radial-gradient(ellipse, #ffffff 43%,#e5e5e5 100%);
     box-shadow:  3px 3px 5px 0px rgba(5, 5, 5, 0.4);
     padding:20px;
@@ -47,6 +48,7 @@ button {
 }
 #x, #ok, #cancel, .ok {
 	text-align:center;
+	background: #ff7c00;
 	background: linear-gradient(top, #ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
 	color:#fff;
 	margin:5px auto;
@@ -70,15 +72,14 @@ button {
 	height: 300px;	
 }
 #i {
+	background: #ff7c00;
 	background: radial-gradient(ellipse, #ffb76b 43%,#ff7c00 100%);
 	position: absolute;
 	bottom:0;
-	left:0;
 	width:100%;
 }
 #l {
 	position: absolute;
-	top:0;
 	left:30px;
 }
 #t {
@@ -90,7 +91,7 @@ button {
 	background: #fff;
 	position: absolute;
 	border-radius: 8px;
-    background: radial-gradient(ellipse, #ffffff 43%,#e5e5e5 100%);
+    background: radial-gradient(ellipse, #fff 43%,#e5e5e5 100%);
     box-shadow:  3px 3px 5px 0px rgba(5, 5, 5, 0.4);
     padding:20px;
 }
