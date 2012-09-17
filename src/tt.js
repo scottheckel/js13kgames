@@ -5,7 +5,7 @@ window.tt = function(doc, g) {
 		afterCallback,
 		prevKeyDown,
 		messages = [
-			'<div>Welcome to <em>At Sea</em>! You are a fisherman at sea trying to get the catch of your life. This is a game created for the <a href="http://js13kgames.com" target="_blank">js13kgames competition</a> by <a href="http://scottheckel.com">Scott Heckel</a>.<br><br>Move your ship with<br><br>Buy and sell items at islands with<br><br>Start fishing with<br><br></div><div id="kL">&#9668;</div><div id="kR">&#9658;</div><div id="kF">F</div><div id="kB">B</div>',
+			'<div>Welcome to <em>At Sea</em>! You are a fisherman at sea trying to get the catch of your life. This is a game created for the <a href="http://js13kgames.com/entries/at-sea/" target="_blank">js13kgames competition</a> by <a href="http://scottheckel.com">Scott Heckel</a>.  <br><br>Move your ship with<br><br>Buy and sell items at islands with<br><br>Start fishing with<br><br></div><div id="kL">&#9668;</div><div id="kR">&#9658;</div><div id="kF">F</div><div id="kB">B</div>',
 			'<div style="text-align:center">To the left is a fuel gauge. Don\'t run out of gas.</div>',
 			'<div style="text-align:center">At the top is the map. As you discover islands they will appear here. You can also purchase a map at an island to reveal the entire world.</div>',
 			'Congratulations on purchasing the sensor!  The sensor is on the right of your fuel gauge.  Watch it\'s level to tell if this area contains a high concentratoin of fish.',
