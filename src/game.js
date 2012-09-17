@@ -139,6 +139,14 @@
 
 	g.c('camera', function(e) {
 		e.y = e.x = 0;
+		e.setSize = function(width, height) {
+			e.w = canvasElement.width = width || innerWidth;
+			e.h = canvasElement.height = height || innerHeight;
+		};
+		e.setSize();
+	});
+	g.cs('resize', 'camera', function() {
+		this.setSize();
 	});
 
 	g.c('c', function(e) {
@@ -416,10 +424,10 @@
 				player.speed += 50;
 				break;
 			case '7': // upgrade rod
-				player.r += 0.25;
+				player.r += 0.35;
 				break;
 			case '6': // upgrade rod
-				player.r += 0.15;
+				player.r += 0.2;
 				break;
 			case '8': // fish sensor
 				player.paused = true;
@@ -438,7 +446,9 @@
 		player.u += price * player.i.f[fishName];
 		player.i.f[fishName] = 0;
 	});
-	player.x = Math.floor(world.length/2);
+
+	// Position at location of a city on the map so you don't spawn too far out at sea
+	player.x = Math.floor(g.f('city')[0].x - camera.w/4);
 	player.y = 220;
 	player.d = 0.98;
 	player.dir = 1;
@@ -499,8 +509,6 @@
 		}
 		drawRect(camera.x, 0, camera.x + camera.w, 300, skyGradient);
 	});
-	camera.w = canvasElement.width = innerWidth;
-	camera.h = canvasElement.height = innerHeight;
 
 	// Cloud setup
 	cloud1.h = 20;

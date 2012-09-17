@@ -126,6 +126,10 @@ window.g = function(gameWrapper) {
 		return false;
 	};
 
+	onresize = function(e) {
+		publish('resize');
+	};
+
 	return {
 		e: createEntity,
 		c: createComponent,
