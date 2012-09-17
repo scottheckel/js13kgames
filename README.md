@@ -7,5 +7,5 @@ For Internet Explorer usage see the [v1.1 branch](https://github.com/scottheckel
 
 No Mobile functionality yet.
 
-[Play the most up-to-date playable version on my site.](http://www.scottheckel.com/js13k)
-[See the original contest page and play the original version of the game on the js13kgames site.](http://js13kgames.com/entries/at-sea/)
+- [Play the most up-to-date playable version on my site.](http://www.scottheckel.com/js13k)
+- [See the original contest page and play the original version of the game on the js13kgames site.](http://js13kgames.com/entries/at-sea/)
