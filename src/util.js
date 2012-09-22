@@ -1,4 +1,4 @@
-u = {
+window.u = {
 	u: function(high, low) {
 		low = low || 0;
 		return Math.random() * (high - low) + low;

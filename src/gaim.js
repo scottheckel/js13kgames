@@ -1,4 +1,4 @@
-g = function(gameWrapper) {
+window.g = function(gameWrapper) {
 	var entityStore = [],
 		componentSetup = {},
 		currentId = 1,
@@ -97,7 +97,6 @@ g = function(gameWrapper) {
 	function loop(step) {
 		if(isRunning) {
 			publish('update', step);
-			publish('predraw');
 			publish('draw');
 			publish('postdraw');
 			setTimeout(function() {loop(step);}, step);

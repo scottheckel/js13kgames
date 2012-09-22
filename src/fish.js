@@ -1,4 +1,4 @@
-f = function(doc, g, u) {
+window.f = function(doc, g, u) {
 	var wrapper = doc.getElementById('f'),
 		meterOutter = doc.getElementById('h'),
 		meter = doc.getElementById('i'),
@@ -11,7 +11,7 @@ f = function(doc, g, u) {
 		powerMeter = 0,
 		powerMeterMax = 3000,
 		pi2 = Math.PI * 2,
-		defaultArcStyle = "rgb(0,0,0)",
+		defaultArcStyle = "#000",
 		pointerStyle,
 		highlightArcStyle,
 		arcStyle,
@@ -79,7 +79,7 @@ f = function(doc, g, u) {
 			state = GOTAWAY;
 			fishing.t('tooltip', 5, 0, 0, 300, function() {
 				hide();
-				fishing.t('gotaway');	
+				fishing.t('start');	
 			}, 0, isKeyDown ? 32 : null);
 		}
 
@@ -139,7 +139,7 @@ f = function(doc, g, u) {
 		context.lineTo(center, center);
 		context.fill();
 
-		meter.style.height = (powerMeter / powerMeterMax) * 300;
+		meter.style.height = (powerMeter / powerMeterMax) * 300 + 'px';
 	}).on('keydown', function(eventArgs, key) {
 		if(state!=FISHING) {
 			return;
@@ -159,7 +159,7 @@ f = function(doc, g, u) {
 			state = GOTAWAY;
 			fishing.t('tooltip', 5, 0, 0, 300, function() {
 				hide();
-				fishing.t('gotaway');	
+				fishing.t('start');	
 			});
 		}
 	}).on('fish', function(fishTypes, zone, rodLength, length) {

@@ -1,4 +1,4 @@
-tt = function(doc, g) {
+window.tt = function(doc, g) {
 	var wrapper = doc.getElementById('tt'),
 		toolTip = g.e('tooltip'),
 		visible = false,
@@ -55,9 +55,9 @@ tt = function(doc, g) {
 
 		// Setup the tool tip
 		wrapper.innerHTML = (msgOverride || messages[messageIndex]) + '<p class="ok">Ok</p>';
-		wrapper.style.top = y;
-		wrapper.style.left = x;
-		wrapper.style.width = width;
+		wrapper.style.top = y + 'px';
+		wrapper.style.left = x + 'px';
+		wrapper.style.width = width + 'px';
 
 		visible = true;
 		wrapper.style.display = '';
