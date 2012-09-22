@@ -155,6 +155,7 @@
 	// Cloud Component
 	g.c('cloud', function(e) {
 		e.x = e.y = e.h = e.w = 0;
+		e.v = -0.002;
 		e.image = new Image();
 		e.image.src = 'cloud.png';
 		e.image.onload = function() {
@@ -169,6 +170,9 @@
 	g.cs('update', 'cloud', function(elapsed, temp1) {
 		// Reposition the cloud
 		temp1 = 500;
+
+		this.x += this.v * elapsed;
+
 		var offscreenX = u.r(temp1,0);
 		if(this.x + this.w < camera.x - temp1 || this.x > camera.x + camera.w + temp1) {
 			if(player.a > 0) { // put on the right side of the screen
@@ -200,7 +204,16 @@
 					waterGradient.addColorStop(0.3,'rgba(10,10,150,0.65)');
 					waterGradient.addColorStop(1,'rgba(10,10,150,0.95)');
 				}
+
 				drawRect(0, 302, screenWidth, screenHeight, waterGradient);
+
+				if(this.x > 0) {
+					this.x -= this.w;
+				}
+				if(this.x <= -this.w) {
+					this.x += this.w;
+				}
+
 				if(e.imageLoaded) {
 					for(var waterX = e.x; waterX < screenWidth; waterX += e.w) {
 						context.drawImage(e.image, waterX, 297);	
@@ -211,24 +224,21 @@
 	});
 	g.cs('playerMove', 'water', function(x, lastX) {
 		this.x += (lastX || x) - x;
-		if(this.x > 0) {
-			this.x -= this.w;
-		}
-		if(this.x <= -this.w) {
-			this.x += this.w;
-		}
+	});
+	g.cs('update', 'water', function(elapsed) {
+		this.x+=elapsed*0.015;
 	});
 
 	// 1D Movement Component
 	g.c('move1d', function(e) {
 		e.v = 0;
-		e.a = 0;
+		e.a = e.a || 0;
 	});
 	g.cs('update', 'move1d', function(elapsed) {
 		if(player.paused) {
 			return;
 		}
-		
+
 		this.v = this.v * this.d + this.a * this.s * 0.4;
 		this.x += this.v * (elapsed / 1000);
 
