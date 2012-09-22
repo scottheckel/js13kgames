@@ -12,6 +12,7 @@
 		cloud3 = g.e('cloud'),
 		cloud4 = g.e('cloud'),
 		cloud5 = g.e('cloud'),
+		water = g.e('water'),
 		waterGradient,
 		skyGradient,
 		welcomeShown,
@@ -138,6 +139,7 @@
 	// Setup the tool tips
 	tt(doc,g);
 
+	// Camera Component
 	g.c('camera', function(e) {
 		e.y = e.x = 0;
 		e.setSize = function(width, height) {
@@ -150,6 +152,7 @@
 		this.setSize();
 	});
 
+	// Cloud Component
 	g.c('cloud', function(e) {
 		e.x = e.y = e.h = e.w = 0;
 		e.image = new Image();
@@ -178,11 +181,54 @@
 		}
 	});
 
+	// Water Component
+	g.c('water', function(e) {
+		e.image = new Image();
+		e.image.src = 'wave.png';
+		e.imageLoaded = false;
+		e.image.onload = function() {
+			e.imageLoaded = true;
+		};
+		e.x = 0;
+		e.w = 48;
+		e.draw = function(screenWidth, screenHeight) {
+			if(e.imageLoaded) {
+				// Draw the water
+				if(!waterGradient) {
+					waterGradient = context.createLinearGradient(0,303,0,500);
+					waterGradient.addColorStop(0,'rgba(20,20,200,0.4)');
+					waterGradient.addColorStop(0.3,'rgba(10,10,150,0.65)');
+					waterGradient.addColorStop(1,'rgba(10,10,150,0.95)');
+				}
+				drawRect(0, 302, screenWidth, screenHeight, waterGradient);
+				if(e.imageLoaded) {
+					for(var waterX = e.x; waterX < screenWidth; waterX += e.w) {
+						context.drawImage(e.image, waterX, 297);	
+					}
+				}
+			}
+		};
+	});
+	g.cs('playerMove', 'water', function(x, lastX) {
+		this.x += (lastX || x) - x;
+		if(this.x > 0) {
+			this.x -= this.w;
+		}
+		if(this.x <= -this.w) {
+			this.x += this.w;
+		}
+	});
+
+	// 1D Movement Component
 	g.c('move1d', function(e) {
 		e.v = 0;
 		e.a = 0;
 	});
 	g.cs('update', 'move1d', function(elapsed) {
+		if(player.paused) {
+			return;
+		}
+		
 		this.v = this.v * this.d + this.a * this.s * 0.4;
 		this.x += this.v * (elapsed / 1000);
 
@@ -348,6 +394,12 @@
 			return;
 		}
 
+		// Player moved since last update
+		if(player.x != player.lastX) {
+			player.t('playerMove', player.x, player.lastX);
+		}
+		player.lastX = player.x;
+
 		// Sensor
 		if(player.i.i[8]) {
 			if(!player.z || !(player.z.x <= player.x + player.w/2 && player.z.x + player.z.w >= player.x + player.w/2)) {
@@ -478,28 +530,10 @@
 		reverseContext.restore();
 	};
 
-	camera.image = new Image();
-	camera.image.src = 'wave.png';
-	camera.imageLoaded = 0;
-	camera.image.onload = function() {
-		camera.imageLoaded = 1;
-	};
 	camera.on('postdraw', function() {
 		context.restore();
 
-		// Draw the water
-		if(!waterGradient) {
-			waterGradient = context.createLinearGradient(0,303,0,500);
-			waterGradient.addColorStop(0,'rgba(20,20,200,0.4)');
-			waterGradient.addColorStop(0.3,'rgba(10,10,150,0.65)');
-			waterGradient.addColorStop(1,'rgba(10,10,150,0.95)');
-		}
-		drawRect(0, 302, camera.w, camera.h, waterGradient);
-		if(camera.imageLoaded) {
-			for(var waterX = 0; waterX < camera.w; waterX += 48) {
-				context.drawImage(camera.image, waterX, 297);	
-			}
-		}
+		water.draw(camera.w, camera.h);
 
 		// Draw the HUD
 		drawMap(world.c, world.length);
