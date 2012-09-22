@@ -477,17 +477,28 @@
 		reverseContext.restore();
 	};
 
+	camera.m = new Image();
+	camera.m.src = 'wave.png';
+	camera.j = 0;
+	camera.m.onload = function() {
+		camera.j = 1;
+	};
 	camera.on('postdraw', function() {
 		context.restore();
 
 		// Draw the water
 		if(!waterGradient) {
-			waterGradient = context.createLinearGradient(0,300,0,500);
-			waterGradient.addColorStop(0,'rgba(20,20,200,0.5)');
-			waterGradient.addColorStop(0.3,'rgba(10,10,150,0.7)');
+			waterGradient = context.createLinearGradient(0,303,0,500);
+			waterGradient.addColorStop(0,'rgba(20,20,200,0.4)');
+			waterGradient.addColorStop(0.3,'rgba(10,10,150,0.65)');
 			waterGradient.addColorStop(1,'rgba(10,10,150,0.95)');
 		}
-		drawRect(0, 300, camera.w, camera.h, waterGradient);
+		drawRect(0, 302, camera.w, camera.h, waterGradient);
+		if(camera.j) {
+			for(var waterX = 0; waterX < camera.w; waterX += 48) {
+				context.drawImage(camera.m, waterX, 297);	
+			}
+		}
 
 		// Draw the HUD
 		drawMap(world.c, world.length);
@@ -507,7 +518,7 @@
 			skyGradient.addColorStop(0,'#A3A4FF');
 			skyGradient.addColorStop(0.9, '#C8C8FF');
 		}
-		drawRect(camera.x, 0, camera.x + camera.w, 300, skyGradient);
+		drawRect(camera.x, 0, camera.x + camera.w, camera.h, skyGradient);
 	});
 
 	// Cloud setup
