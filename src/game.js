@@ -88,8 +88,8 @@
 			5000, // engine 2
 			15000, // engine 3
 			-1, // rod 1
-			10000, // rod 2
-			30000, // rod 3
+			5000, // rod 2
+			25000, // rod 3
 			1000, // sensor
 			5000, // map
 			-1, // fuel tank 1
