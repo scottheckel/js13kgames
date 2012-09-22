@@ -7,15 +7,16 @@
 		world = g.e('world'),
 		player = g.e('player,move1d,inventory'),
 		camera = g.e('camera'),
-		cloud1 = g.e('c'),
-		cloud2 = g.e('c'),
-		cloud3 = g.e('c'),
-		cloud4 = g.e('c'),
-		cloud5 = g.e('c'),
+		cloud1 = g.e('cloud'),
+		cloud2 = g.e('cloud'),
+		cloud3 = g.e('cloud'),
+		cloud4 = g.e('cloud'),
+		cloud5 = g.e('cloud'),
 		waterGradient,
 		skyGradient,
 		welcomeShown,
 		firstDiscovery = true,
+		waveBaseX = 0,
 		fishTypes = [
 			{
 				n: 'Rockfish',
@@ -149,20 +150,20 @@
 		this.setSize();
 	});
 
-	g.c('c', function(e) {
+	g.c('cloud', function(e) {
 		e.x = e.y = e.h = e.w = 0;
-		e.m = new Image();
-		e.m.src = 'cloud.png';
-		e.m.onload = function() {
-			e.j = 1;
+		e.image = new Image();
+		e.image.src = 'cloud.png';
+		e.image.onload = function() {
+			e.imageLoaded = 1;
 		};
 	});
-	g.cs('draw', 'c', function() {
-		if(this.j) {
-			context.drawImage(this.m, this.x, this.y, this.w, this.h);
+	g.cs('draw', 'cloud', function() {
+		if(this.imageLoaded) {
+			context.drawImage(this.image, this.x, this.y, this.w, this.h);
 		}
 	});
-	g.cs('update', 'c', function(elapsed, temp1) {
+	g.cs('update', 'cloud', function(elapsed, temp1) {
 		// Reposition the cloud
 		temp1 = 500;
 		var offscreenX = u.r(temp1,0);
@@ -338,8 +339,8 @@
 	// Player Setup
 	player.on('draw', function() {
 		doc.getElementById('w').innerHTML = "$"+player.u;
-		if(player.j) {
-			context.drawImage(player.dir > 0 ? player.n : player.m,player.x,player.y);
+		if(player.imageLoaded) {
+			context.drawImage(player.dir > 0 ? player.n : player.image,player.x,player.y);
 		}
 	}).on('update', function(elapsed) {
 		if(player.paused) {
@@ -460,28 +461,28 @@
 	player.deltaF = 10;
 	player.paused = false;
 	player.r = 0;	// rod size
-	player.m = new Image();
+	player.image = new Image();
 	player.n = new Image();
-	player.m.src = 'boat.png';
-	player.j = 0; // images available
+	player.image.src = 'boat.png';
+	player.imageLoaded = 0; // images available
 
 	// Create a flipped version of the boat
-	player.m.onload = function() {
+	player.image.onload = function() {
 		reverseContext.save();
 		reverseContext.scale(-1,1);
-		reverseContext.drawImage(player.m,-player.w,0,player.w,player.h);
+		reverseContext.drawImage(player.image,-player.w,0,player.w,player.h);
 		player.n.src = reverseCanvas.toDataURL("image/png");
 		player.n.onload = function() {
-			player.j = 1;
+			player.imageLoaded = 1;
 		};
 		reverseContext.restore();
 	};
 
-	camera.m = new Image();
-	camera.m.src = 'wave.png';
-	camera.j = 0;
-	camera.m.onload = function() {
-		camera.j = 1;
+	camera.image = new Image();
+	camera.image.src = 'wave.png';
+	camera.imageLoaded = 0;
+	camera.image.onload = function() {
+		camera.imageLoaded = 1;
 	};
 	camera.on('postdraw', function() {
 		context.restore();
@@ -494,9 +495,9 @@
 			waterGradient.addColorStop(1,'rgba(10,10,150,0.95)');
 		}
 		drawRect(0, 302, camera.w, camera.h, waterGradient);
-		if(camera.j) {
+		if(camera.imageLoaded) {
 			for(var waterX = 0; waterX < camera.w; waterX += 48) {
-				context.drawImage(camera.m, waterX, 297);	
+				context.drawImage(camera.image, waterX, 297);	
 			}
 		}
 
