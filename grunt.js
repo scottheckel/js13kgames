@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     min: {
       'min/g.min.js' : ['src/gaim.js', 'src/util.js', 'src/tt.js', 'src/fish.js', 'src/menu.js', 'src/game.js']
     },
+
     mincss: {
       compress: {
         files: {

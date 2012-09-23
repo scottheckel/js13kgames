@@ -4,6 +4,7 @@ window.g = function(gameWrapper) {
 		currentId = 1,
 		events = {},
 		isRunning = false,
+		hasGamepad = false,
 		keysDown = {};
 
 	// Creates a new entity
@@ -92,11 +93,30 @@ window.g = function(gameWrapper) {
 	function run(step) {
 		step = step || (1000/60); // ~60 fps default
 		isRunning = true;
+		if(Gamepad && Gamepad.supported) {
+			hasGamepad = true;
+			publish('gamepadSupport');
+		}
 		loop(step);
 	}
 
 	function loop(step) {
 		if(isRunning) {
+
+			// Handle gamepads
+			if(hasGamepad) {
+				var gamepadState = Gamepad.getState(0);
+				if(gamepadState) {
+					if(gamepadState.dpadLeft) {
+						publish('dpadLeft');
+					}
+					if(gamepadState.dpadRight) {
+						publish('dpadRight');
+					}
+				}
+			}
+
+			// Create better keydown support for opera
 			if(window.opera) {
 				for(var key in keysDown) {
 					publish('keydown', keysDown[key], key);

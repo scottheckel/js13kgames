@@ -465,6 +465,10 @@
 		player.key=0;
 	}).on('keydown', function(eventArgs,key) {
 		player.key = key;
+	}).on('dpadLeft', function() {
+		player.key = 37;
+	}).on('dpadRight', function() {
+		player.key = 39;
 	}).on('catch', function(fish) {
 		player.i.f[fish.n]++;
 		player.paused = false;
