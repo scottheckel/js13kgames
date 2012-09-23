@@ -300,7 +300,10 @@
 		for(var buildingKey in this.b) {
 			var building = this.b[buildingKey],
 				yCoordinate;
-			drawRect(building.x, 265 - building.h, building.x + 51, 265, building.c);
+
+			if(building.h) {
+				drawRect(building.x, 265 - building.h, building.x + 51, 265, building.c);
+			}
 
 			// windows
 			for(var wY = 6; wY < building.h - 10; wY += 12.5) {
@@ -476,7 +479,7 @@
 		{
 			case '0':
 			case '1':
-				player.f += !itemIndex ? player.deltaF : 1000;
+				player.f += itemIndex == '0' ? player.deltaF : 1000;
 				player.f = player.f > player.maxF ? player.maxF : player.f;
 				player.i.i[itemIndex]=0;
 				break;
@@ -661,15 +664,29 @@
 		// setup the cities
 		var totalCities = u.r(world.length/800,1);
 		for(temp = 0; temp < totalCities; temp++) {
-			var c = g.e('city,inventory');
-			c.x = u.r(world.length,0);
-			c.w = u.r(700,200);
+			var otherCities = g.f('city'),
+				c = g.e('city,inventory'),
+				conflict = false,
+				conflictCount = 0;
+			do {
+				c.x = u.r(world.length,0);
+				c.w = u.r(700,200);
+				for(var key in otherCities) {
+					conflict |= collide1d(c, otherCities[key]);
+				}
+				conflictCount++;
+			} while(conflict && conflictCount < 10);
 			world.c.push(c);
 		}
 	}
 
 	function notInView(x1, w) {
 		return x1 + w < camera.x || x1 > camera.x + camera.w;
+	}
+
+	function collide1d(one, two) {
+		return (one.x >= two.x && one.x <= two.x + two.w) || // one in two
+				(two.x >= one.x && two.x <= one.x + one.w);  // two in one
 	}
 })(document, g, u);
 
