@@ -25,7 +25,7 @@ module.exports = function(grunt) {
           'js13k.zip': ['min/g.min.js', 'min/s.min.css', 'min/index.html','min/*.png']
         }
       },
-      zipWithPrefix : {
+      zipWithAll : {
         options: {
           mode: 'zip'
         },
@@ -40,6 +40,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-mincss');
 
   // Default task.
-  grunt.registerTask('default', 'lint:all min mincss compress:zip compress:zipWithPrefix');
+  grunt.registerTask('default', 'lint:all min mincss compress:zip compress:zipWithAll');
 
 };
