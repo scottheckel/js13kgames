@@ -3,7 +3,8 @@ window.g = function(gameWrapper) {
 		componentSetup = {},
 		currentId = 1,
 		events = {},
-		isRunning = false;
+		isRunning = false,
+		keysDown = {};
 
 	// Creates a new entity
 	function createEntity(componentsSelector) {
@@ -96,6 +97,11 @@ window.g = function(gameWrapper) {
 
 	function loop(step) {
 		if(isRunning) {
+			if(window.opera) {
+				for(var key in keysDown) {
+					publish('keydown', keysDown[key], key);
+				}
+			}
 			publish('update', step);
 			publish('draw');
 			publish('postdraw');
@@ -117,11 +123,13 @@ window.g = function(gameWrapper) {
 	};
 
 	onkeydown = function(e) {
+		keysDown[e.keyCode] = e;
 		publish('keydown', e, e.keyCode);
 		return false;
 	};
 
 	onkeyup = function(e) {
+		delete keysDown[e.keyCode];
 		publish('keyup', e, e.keyCode);
 		return false;
 	};
