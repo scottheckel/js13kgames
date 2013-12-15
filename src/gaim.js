@@ -132,6 +132,12 @@ window.g = function(gameWrapper) {
 		cs: componentSubscribe,
 		f: find,
 		r: run,
-		s: function() { isRunning = false; }
+		s: function() { isRunning = false; },
+		KEYS: {
+			LEFT: 37,
+			UP: 38
+			RIGHT: 39,
+			DOWN: 40
+		}
 	};
 };
